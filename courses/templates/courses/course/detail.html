@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{object.title}} | Detail{% endblock title %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+{% endblock css %}
+
+{% block content %}
+    {% with subject=object.subject %}
+    <!-- single course section -->
+	<section class="single-course spad pb-0">
+		<div class="container">
+			<div class="course-meta-area">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1">
+						
+						<h3>{{object.title}}</h3>
+						<div class="course-metas">
+							<div class="course-meta">
+								<div class="course-author">
+									<div class="ca-pic set-bg" data-setbg="{% static 'img/authors/2.jpg'%}"></div>
+									<h6>Teacher</h6>
+									<p>{{object.owner.username}}</p>
+								</div>
+							</div>
+							<div class="course-meta">
+								<div class="cm-info">
+									<h6>Category</h6>
+									<p>{{subject.title}}</p>
+								</div>
+							</div>
+							<div class="course-meta">
+								<div class="cm-info">
+									<h6>Students</h6>
+									<p>{{object.students.all.count}} Registered Students</p>
+								</div>
+							</div>
+							
+						</div>
+						{% if request.user.is_authenticated %}
+							{% if request.user.profile.is_email_confirmed %}
+								<form action="{% url "student_enroll_course" %}" method="post">
+								{{ enroll_form }}
+								{% csrf_token %}
+								<input type="submit" value="Enroll now" class="site-btn buy-btn">
+								</form>
+							{% else %}
+								<div class="alert alert-info">
+									Info! Your Account is not activated. Please activate your 
+									account to enroll to the course.
+								</div>
+							{% endif %}
+						{% else %}
+							<a href="{% url "student_registration" %}" class="button">
+							Register to enroll
+							</a>
+							
+						{% endif %}
+						
+					</div>
+				</div>
+			</div>
+            <hr>
+			<div class="d-flex">
+               <div class="col-md-8 mb-5">
+                    <div>
+                        <h2>Overview</h2>
+                        <hr>
+                        </div>
+                        <div>
+                        <h5>{{object.overview}}</h5>
+                        </div>
+                    </div>
+            </div>
+			
+		</div>
+	</section>
+	<!-- single course section end -->
+    {% endwith %}
+{% endblock content %}

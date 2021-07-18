@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home | E-Gurukul{% endblock title %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: #333;
+			}
+{% endblock css %}
+{% block content %}
+   
+
+
+	<!-- categories section -->
+	<section class="categories-section spad" id="course_cat">
+		<div class="container">
+			<div class="section-title">
+				<h2>{{subject.title}} Courses</h2>
+			</div>
+            
+            <div class="course-warp my-5">                                   
+			<div class="row course-items-area">
+				<!-- course -->
+                {% if courses %}
+                {% for course in courses %}
+					<div class="col-lg-4 col-md-6 mt-2">
+					<div class="categorie-item shadow">
+						<div class="ci-thumb set-bg" data-setbg="{{course.thumbnail.url}}"></div>
+                        <a href="#">
+						<div class="ci-text">
+							<h5>{{course.title}}</h5>
+							<p>{{course.overview|slice:"0:100"}}..</p>
+							<span>Added by <emp>{{course.owner.username}}<emp></span>
+							<hr>
+							<a href="{% url "course_detail" course.slug %}" class="btn btn-danger btn-block">View</a>
+						</div>
+                        </a>
+					</div>
+				</div>
+				{% endfor %}
+                {% else %}
+                  <div class="m-auto">
+                     <h2> No any {{subject.title}} courses are available for now</h2>
+                  </div>
+                 {% endif %}
+				
+			</div>
+		</div>
+
+				
+			</div>
+		</div>
+	</section>
+	<!-- categories section end -->
+
+
+	
+
+
+	<!-- course section -->
+	
+	<!-- course section end -->
+
+
+	<!-- signup section -->
+	
+{% endblock content %}

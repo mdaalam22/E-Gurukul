@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Chat room for "{{ course.title }}"{% endblock %}
+
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+        .chat-title{
+            color:white;
+            background:#bd2130;
+            padding:20px 4px;
+
+        }
+        .group-div{
+            background:#d9ebd9;
+            margin-top:5px;
+            padding:15px 4px;
+            font-size:20px;
+            font-weight:500;
+        }
+        .group-div a{
+            color:black;
+        }
+{% endblock css %}
+
+{% block content %}
+    <div></div>
+    <div class="container mt-2">
+        <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-title">
+                    <h2 class="chat-title">Chat Group</h2>
+                </div>
+                <div class="card-body">
+                    <div class="group-div"><a href="">Django group</a></div>
+                    <div class="group-div"><a href="">web group</a></div>
+                    <div class="group-div"><a href="">Node js group</a></div>
+                    <div class="group-div"><a href="">Digital marketing group</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h4 style="background:#bd2130;padding:20px 3px;color:white;width:106%;">{{course.title}}</h4>
+            <div id="chat">
+            </div>
+            <div id="chat-input">
+                <input id="chat-message-input" type="text" style="padding-left:5px;">
+                <input id="chat-message-submit" type="submit" value="Send" style="background:#bd2130;">
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block domready %}
+    var url = 'ws://' + window.location.host +'/ws/chat/room/' + '{{ course.id }}/';
+    var chatSocket = new WebSocket(url);
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data.message;
+        var dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
+        var datetime = new Date(data['datetime']).toLocaleString('en',dateOptions);
+        var isMe = data.user === '{{ request.user }}';
+        var source = isMe ? 'me' : 'other';
+        var name = isMe ? 'Me' : data.user;
+        var $chat = $('#chat');
+        $chat.append('<div class="message ' + source + '">' +
+                    '<strong>' + name + '</strong> ' +
+                    '<span class="date">' + datetime + '</span><br>' +
+                    message +
+                    '</div>');
+        $chat.scrollTop($chat[0].scrollHeight);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    var $input = $('#chat-message-input');
+    var $submit = $('#chat-message-submit');
+    $submit.click(function() {
+        var message = $input.val();
+        if(message) {
+            // send message in JSON format
+            chatSocket.send(JSON.stringify({'message': message}));
+            // clear input
+            $input.val('');
+            // return focus
+            $input.focus();
+        }
+    });
+
+    $input.focus();
+    $input.keyup(function(e) {
+        if (e.which === 13) {
+            // submit with enter / return key
+            $submit.click();
+        }
+    });
+{% endblock %}

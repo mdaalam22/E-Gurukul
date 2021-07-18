@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search Results for
+{% if query %} "{{query }}" {% endif %}
+{% endblock title %}
+
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: #333;
+			}
+{% endblock css %}
+
+{% block content %}
+    <div class="container-fluid bg-dark">
+        <div class="m-auto p-5 text-center">
+            <form action="{% url 'search' %}" method="get" class="d-flex justify-content-center align-item-center">
+                <div class="form-group">
+                    <input type="search" name="search" id="" class="form-control py-4 w-100" maxlength="30" required>
+                    <button type="submit" class="btn btn-danger px-5 py-2 my-2">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h3 class="bg-secondary px-4 py-3 text-white">Search Result for
+    {% if query %}
+        <span class="font-weight-bold">"{{query}}"</span>
+    {% endif %}
+    </h3>
+
+    <div class="container my-5">
+
+    {% if query %}
+      {% if courses %}
+        {% for course in courses %}
+        <div class="card mb-3 shadow w-75">
+            <div class="row g-0 no-gutters">
+                <div class="col-md-4">
+                    <img src="{{course.thumbnail.url}}" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold">{{course.title}}</h5>
+                        <p class="card-text">{{course.overview|slice:"0:150"}}...</p>
+                        <p class="display-5 text-danger text-shadow font-weight-bold">Added by {{course.owner.username}}</p>
+                        <a href="{% url "course_detail" course.slug %}" class="btn btn-block btn-danger">View Course</a>
+                        
+                    </div>
+                
+                </div>    
+            </div>
+        </div>
+        {% endfor %}
+      {% else %}
+            <div class="text-center">
+                <h3 class="text-center p-4">Sorry, we couldn't find any results</h3>
+            </div>
+      {% endif %}
+    {% else %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Hello!</strong> You haven't search for any courses.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+
+        
+    
+
+    </div>
+{% endblock content %}

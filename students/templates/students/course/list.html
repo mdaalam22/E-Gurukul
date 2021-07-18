@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My courses{% endblock %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: #333;
+			}
+{% endblock css %}
+{% block stu_course_list %}text-danger{% endblock stu_course_list %}
+{% block content %}
+
+    <div class="d-flex justify-content-center">
+        <div class="col-md-12 m-5">
+            <div class="card p-4 shadow">
+                <div class="card-title"><h1>My courses</h1></div>
+                <div class="card-body">
+                    {% include 'partials/_message.html' %}
+                        {% if not request.user.profile.is_email_confirmed %}
+                            <div class="my-4">
+                                <div class="alert alert-info">
+                                    <p><span class="font-weight-bold text-danger">Please Activate your Account!</span>
+                                    Account activation link has been sent to your email
+                                    <b> {{request.user.email}}</b></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    <div class="row text-center">
+                        
+                        {% for course in object_list %}
+                        <div class="col-md-4 shadow-sm">
+                         <img src="{{course.thumbnail.url}}" class="img-thumbnail p-3" alt="">
+                        <h4 class="p-2">{{ course.title }}</h4>
+                        
+                        <p><a href="{% url "student_course_detail" course.id %}" class="btn btn-lg btn-warning">
+                        Access contents</a></p>
+                        </div>
+                        {% empty %}
+                        <p>
+                        You are not enrolled in any courses yet.
+                        <a href="{% url "course_list" %}">Browse courses</a>
+                        to enroll in a course.
+                        </p>
+                        {% endfor %}
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

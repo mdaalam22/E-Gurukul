@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block css %}
+.header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: #333;
+			}
+.footer-section{
+    border-top:none;
+}
+.activateprofile{
+    background:#bd2130 !important;
+}
+.activateprofile a{
+    color:#fff !important;
+}
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center align-item-center">
+        <div class="col-md-10 shadow-sm p-3 my-3">
+            <div class="row">
+                {% include 'partials/_sidebar.html' %}
+                
+
+                <div class="col-md-9">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="userInfo-tab" data-toggle="tab" href="#userInfo" role="tab" aria-controls="userInfo" aria-selected="true">User Info</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="editInfo-tab" data-toggle="tab" href="#editInfo" role="tab" aria-controls="editInfo" aria-selected="false">Edit Info</a>
+                        </li>
+                        </ul>
+                        <br>
+                        <hr>
+                        <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade {% if not s_form.errors or p_form.errors %}show active{% endif %}" id="userInfo" role="tabpanel" aria-labelledby="userInfo-tab">
+                            <div class="d-block">
+                                {% if not request.user.profile.is_email_confirmed %}
+                                    <div class="my-4">
+                                        <div class="alert alert-info">
+                                            <p><span class="font-weight-bold text-danger">Please Activate your Account!</span>
+                                            Account activation link has been sent to your email
+                                            <b> {{request.user.email}}</b></p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+                                {% if messages %}
+                                    <div class="messages">
+                                        {% for message in messages %}
+                                        <div class="alert alert-sm alert-dismissible alert-success">
+                                        
+                                        <strong>{{ message|striptags }}</strong>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                <div class="img-section text-center">
+                                    <img src="{{user.profile.image.url}}" class="rounded-circle" width="100px" height="100px" alt="">
+                                    <p class="mb-0 font-weight-bold text-danger">{{request.user.username}}</p>
+                                    <span>{{request.user.email}}</span>
+                                </div>
+                                <hr>
+                                <div class="more-details text-center my-4">
+                                    <h6 class="font-weight-bold">First Name</h6>
+                                    <span class="text-capitalize">{{request.user.first_name}}</span>
+                                    <hr>
+                                    <h6 class="font-weight-bold my-2">Last Name</h6>
+                                    <span class="text-capitalize">{{request.user.last_name}}</span>
+                                    <hr>
+                                    {% if i_form %}
+                                        <h6 class="font-weight-bold">Phone Number</h6>
+                                        <span class="text-capitalize">{{user.instructor.phone_number}}</span>
+                                        <hr>
+                                        <h6 class="font-weight-bold">Date Of Birth:</h6>
+                                        <span class="text-capitalize">{{user.instructor.dob}}</span>
+                                        <hr>
+                                        <h6 class="font-weight-bold">Address</h6>
+                                        <span class="text-capitalize">{{user.instructor.address}}</span>
+                                        <hr>
+                                        <h6 class="font-weight-bold">Bio</h6>
+                                        <span class="text-capitalize">{{user.instructor.bio}}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade {% if s_form.errors or p_form.errors %}show active{% endif %}" id="editInfo" role="tabpanel" aria-labelledby="editInfo-tab">
+                            <div class="d-block m-auto">
+                                     {% if s_form.errors or p_form.errors %}
+                                        <div class="alert alert-sm alert-dismissible alert-danger">
+                                            {% for field in s_form %}
+                                            <strong>{{ field.errors|striptags }}</strong>
+                                            {% endfor %}
+                                            {% for field in p_form %}
+                                            <strong>{{ field.errors|striptags }}</strong>
+                                            {% endfor %}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                <h3 class="py-3 font-weight-bold">Update Info</h3>
+                                <hr>
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group my-2">
+                                        {{s_form.username}}
+                                    </div>
+                                    <div class="form-group my-2">
+                                        {{s_form.first_name}}
+                                    </div>
+                                    <div class="form-group my-2">
+                                        {{s_form.last_name}}
+                                    </div>
+                                    <div class="form-group my-2">
+                                        {{s_form.email}}
+                                    </div>
+                                    <div class="form-group my-2">
+                                        {{p_form.image}}
+                                    </div>
+                                    {% if i_form %}
+                                        <div class="form-group my-2">
+                                            {{i_form.phone_number}}
+                                        </div>
+                                        <div class="form-group my-2">
+                                            {{i_form.dob}}
+                                        </div>
+                                        <div class="form-group my-2">
+                                            {{i_form.address}}
+                                        </div>
+                                        <div class="form-group my-2">
+                                            {{i_form.bio}}
+                                        </div>
+                                    {% endif %}
+                                    
+                                        <input type="submit" value="Update" class="btn btn-outline-primary">
+                                    
+                                    
+                                </form>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

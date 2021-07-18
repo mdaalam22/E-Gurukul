@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load groups %}
+<head>
+	<title>{% block title %}E-Gurukul{% endblock title %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->   
+	<link href="{% static 'img/favicon.ico' %}" rel="shortcut icon"/>
+
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.gstatic.com"> 
+	<link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Squada+One&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+
+
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+    <style>
+		.sticky {
+			position: fixed;
+			top: 0;
+			width: 100%;
+			background-image: linear-gradient(135deg, rgba(107, 107, 107,0.06) 0%, rgba(107, 107, 107,0.06) 50%,rgba(202, 202, 202,0.06) 50%, rgba(202, 202, 202,0.06) 100%),linear-gradient(90deg, rgb(20,20,20),rgb(20,20,20)); background-size: 30px 30px;
+			padding-top:18px;
+			padding-bottom:21px;
+			z-index:9999;
+			}
+
+        {% block css %}
+        {% endblock css %}
+    </style>
+
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section" id="navbar">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-3 col-md-3">
+					<div class="site-logo">
+						<!-- <img src="img/logo.png" alt=""> -->
+						<a href="{% url 'course_list' %}">
+						<h2 style="color: white;font-weight:bold;border:5px dotted #fff;padding:5px 8px;
+						font-family:'Squada One', cursive;background: -webkit-linear-gradient(#fff,red);
+ 						-webkit-background-clip: text;
+ 						 -webkit-text-fill-color: transparent;">
+						<span style="color:red;">E</span>-Gurukul</h2>
+						</a>
+					</div>
+					<div class="nav-switch">
+						<i class="fa fa-bars"></i>
+					</div>
+				</div>
+				<div class="col-lg-9 col-md-9">
+                    
+					
+					
+						<div class="dropdown show header-btn mt-2">
+						{% if request.user.is_authenticated %}
+							<a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<img src="{{request.user.profile.image.url}}" class="rounded-circle" width="30px" height="30px" alt="">  {{request.user.username}}
+							</a>
+
+							<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuLink" style="width:30%;">
+								<a class="dropdown-item" href="{% url 'logout' %}" style="padding-right: 0px;margin-right: 33px;width: 100%;overflow: hidden;">
+								Logout</a>
+								<a class="dropdown-item" href="{% url 'profile' %}" style="padding-right: 0px;margin-right: 33px;width: 100%;overflow: hidden;">Settings</a>
+								
+							</div>
+							{% else %}
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Login now
+								</a>
+
+								<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuLink1">
+									<a class="dropdown-item" href="{% url 'login' %}" style="padding-right: 0px;margin-right: 33px;width: 100%;overflow: hidden;">Login</a>
+									
+								</div>
+
+							{% endif %}
+						</div>
+                    
+					<nav class="main-menu">
+						<ul>
+							<li><a href="{% url 'course_list' %}" class="{% block home %}{% endblock home %}">Home</a></li>
+							<li><a href="{% url 'about' %}" class="{% block about %}{% endblock about %}">About us</a></li>
+							{% if request.user.is_authenticated %}
+							<li><a href="{% url 'student_course_list' %}" class="{% block stu_course_list %}{% endblock stu_course_list %}">My Courses</a></li>
+							{% endif %}
+
+							{% if request.user|has_group:"Instructors" %} 
+							<li><a href="{% url 'manage_course_list' %}" class="{% block manage_course_list %}{% endblock manage_course_list %}" >Manage Courses</a></li>
+							{% endif %}
+							
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="{% url 'contact' %}" class="{% block contact %}{% endblock contact %}">Contact</a></li>
+							
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- Header section end -->
+
+{% block content %}
+
+{% endblock %}
+	
+
+	
+
+
+	<!-- footer section -->
+	<footer class="footer-section spad pb-0">
+		<!--<div class="footer-top">
+			<div class="footer-warp">
+				<div class="row p-5">
+					<div class="col-md-4 widget-item">
+						<h4>Contact Info</h4>
+						<ul class="contact-list">
+							<li>1481 Creekside Lane <br>Avila Beach, CA 931</li>
+							<li>+53 345 7953 32453</li>
+							<li>yourmail@gmail.com</li>
+						</ul>
+					</div>
+					
+					
+					<div class="col-md-4 widget-item">
+						<h4>Latest courses</h4>
+						<ul>
+							<li><a href="">Applied Studies</a></li>
+							<li><a href="">Computer Engeneering</a></li>
+							<li><a href="">Software Engeneering</a></li>
+							<li><a href="">Informational Engeneering</a></li>
+							<li><a href="">System Engeneering</a></li>
+						</ul>
+					</div>
+					<div class="col-md-4 widget-item">
+						<h4>Newsletter</h4>
+						<form class="footer-newslatter">
+							<input type="email" placeholder="E-mail">
+							<button class="site-btn">Subscribe</button>
+							<p>*We don’t spam</p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		<div class="footer-bottom">
+			<div class="footer-warp">
+				<ul class="footer-menu text-white">
+					<li><a href="#">Terms & Conditions</a></li>
+					<li><a href="#">Register</a></li>
+					<li><a href="#">Privacy</a></li>
+				</ul>
+				<div class="copyright"><a target="_blank" href="#" class="font-weight-bold">E-Gurukul</a></div>
+			</div>
+		</div>
+	</footer>  
+	<!-- footer section end -->
+
+
+	<!--====== Javascripts & Jquery ======-->
+	
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/mixitup.min.js' %}"></script>
+	<script src="{% static 'js/circle-progress.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+	{% comment %} <script src="{% static 'js/reconnecting-websocket.js' %}"></script> {% endcomment %}
+    <script>
+    $(document).ready(function() {
+		window.onscroll = function() {StickyFun()};
+
+			var navbar = document.getElementById("navbar");
+			var pageoff = document.getElementById('pageoff');
+			var sticky = pageoff.offsetTop;
+
+			function StickyFun() {
+			if (window.pageYOffset >= sticky) {
+				navbar.classList.add("sticky")
+				
+			} else {
+				navbar.classList.remove("sticky");
+				
+			}
+			}
+		
+    {% block domready %}
+
+    {% endblock %}
+    });
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+</html>

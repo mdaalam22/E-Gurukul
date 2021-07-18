@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Delete course{% endblock %}
+{% block css %}
+ .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+{% endblock css %}
+
+{% block content %}
+
+    
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6 m-5">
+        <div class="card">
+            <div class="card-title bg-dark text-white p-3">
+                 <h3>Delete course "{{ object.title }}"</h3>
+            </div>
+            <div class="card-body">
+                <div class="module">
+                    <form action="" method="post">
+                    {% csrf_token %}
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    <button type="submit" class="btn btn-danger">Confirm </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+
+
+{% endblock %}

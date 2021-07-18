@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load groups %}
+{% block title %}Became an Instructor{% endblock title %}
+{% block css %}
+.header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+ .form-group{
+     margin:5px;
+ }           
+{% endblock css %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6 m-5">
+        {% if request.user|has_group:"Instructors" %} 
+            <div>
+                <div class="alert alert-info" role="alert">
+                    You are already an Instructor
+                </div>
+                <div>
+                    <a href="{% url "manage_course_list" %}" class="btn btn-success">Manage Courses</a>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="card shadow">
+                <div class="card-title">
+                    <h2 class="text-center py-3 font-weight-bold border-bottom">Become an Instructor</h2>
+                </div>
+                
+                    <form action="{% url "became_an_instructor" %}" method="post">
+                    <div class="card-body">
+                    {% include 'partials/_message.html' %}
+                    {% csrf_token %}
+                        
+                        <br>
+                        
+                            <input type="text" name="phone_number" placeholder="Phone Number" class="form-control" required>
+                       
+                        <br><br>
+                        
+                            <input type="date" name="dob" placeholder="Date Of Birth" class="form-control" required>
+
+                        <br><br>
+                        
+                            <input type="text" name="address" placeholder="Address" class="form-control" required>
+
+                        
+                        <br><br>
+                       
+                            
+                        
+                            <textarea class="form-control" name="bio" placeholder="write about yoursef..." id="exampleFormControlTextarea1" rows="3"></textarea>
+                       
+                        <br><br><br>
+                        <button class="btn-block btn btn-danger my-4" type="submit">Became an Instructor</button>
+                    </div>
+                    </form>
+                
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us | E-Gurukul {% endblock title %}
+{% block css %}
+     .header-section{
+				position: sticky;
+                top:0;
+                width: 100%;
+                background-image: linear-gradient(135deg, rgba(107, 107, 107,0.06) 0%, rgba(107, 107, 107,0.06) 50%,rgba(202, 202, 202,0.06) 50%, rgba(202, 202, 202,0.06) 100%),linear-gradient(90deg, rgb(20,20,20),rgb(20,20,20)); background-size: 30px 30px;
+				padding:20px 0 20px 0;
+                z-index:9999;
+                
+			}
+    .footer-section{
+        border-top:none;
+    }
+    .about-title{
+        font-weight:bold;
+        letter-spacing:3px;
+        border-bottom:2px solid #bd2130;
+        padding-bottom:8px;
+        margin-bottom:10px;
+        color:#bd2130;
+    }
+    #team {
+    padding: 60px 0;
+    text-align: center;
+    background-color: #fff;
+    color: #fff;
+    margin-top:40px;
+    margin-bottom:0;
+}
+#team h1 {
+    position: relative;
+    padding: 0px 0px 15px;
+    font-weight:bold;
+    color:#bd2130;
+}
+#team p {
+    font-size: 15px;
+    font-style: italic;
+    padding: 0px;
+    margin: 25px 0px 40px;
+}
+#team h2::after {
+    content: '';
+    border-bottom: 2px solid #fff;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    width: 90px;
+    margin: 0 auto;
+    display: block;
+}
+#team .member {
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 15px 0px 15px 0px;
+    box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.4);
+}
+#team .member .member-info {
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: -200px;
+    transition: 0.4s;
+    padding: 15px 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+#team .member:hover .member-info {
+    left: 0px;
+    right: 0px;
+}
+#team .member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+    font-size: 18px;
+    color: #fff;
+}
+#team .member span {
+    font-style: italic;
+    display: block;
+    font-size: 13px;
+}
+#team .member .social-links {
+    margin-top: 15px;
+}
+#team .member .social-links a {
+    transition: none;
+    color: #fff;
+}
+#team .member .social-links a:hover {
+    color: #ffc107;
+}
+#team .member .social-links i {
+    font-size: 18px;
+    margin: 0 2px;
+}
+{% endblock css %}
+{% block about %}text-danger{% endblock about %}
+{% block content %}
+<div class="container-fluid bg-dark">
+   <div class="text-center p-5">
+        <h2 class="text-danger display-3 font-weight-bold">About Us</h2>
+        <p class="text-white font-weight-bold">Lorem ipsum dolor sit amet, consectetur adipisicing elit sit molestias</p>
+   </div>
+</div>
+
+<div class="container my-4">
+    <div class="row my-5 no-gutters">
+        <div class="col-md-6">
+            <img src="{% static 'img/intro.png' %}" class="img-fluid mt-5" alt="">
+        </div>
+        <div class="col-md-6">
+            <h3 class="about-title">INTRODUCTION</h3>
+            <p class="text-justify">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptate nesciunt, 
+                voluptatem quasi eum incidunt quos impedit explicabo optio magni error! 
+                Delectus aliquid reprehenderit repudiandae, eos exercitationem modi 
+                doloremque qui recusandae molestiae quas dolorum deserunt aliquam, 
+                distinctio porro laborum quibusdam blanditiis dicta magnam dolor facere in nisi.
+                 Temporibus recusandae id beatae nihil perferendis molestiae, debitis ipsam corporis laborum,
+                  accusamus atque consectetur officiis quam voluptas voluptatibus natus velit nam eveniet sit 
+                  deserunt non qui voluptate quis. Quos atque corrupti rerum repudiandae deserunt tempora velit
+                   soluta suscipit, fugit et labore quam, laudantium,
+                 aliquam a. Cum animi, corrupti accusamus tempora pariatur accusantium quidem consequatur!
+            </p>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        
+        <div class="col-md-6">
+            <h3 class="about-title">OUR VISION</h3>
+            <p class="text-justify">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptate nesciunt, 
+                voluptatem quasi eum incidunt quos impedit explicabo optio magni error! 
+                Delectus aliquid reprehenderit repudiandae, eos exercitationem modi 
+                doloremque qui recusandae molestiae quas dolorum deserunt aliquam, 
+                distinctio porro laborum quibusdam blanditiis dicta magnam dolor facere in nisi.
+                 Temporibus recusandae id beatae nihil perferendis molestiae, debitis ipsam corporis laborum,
+                  accusamus atque consectetur officiis quam voluptas voluptatibus natus velit nam eveniet sit 
+                  deserunt non qui voluptate quis. Quos atque corrupti rerum repudiandae deserunt tempora velit
+                   soluta suscipit, fugit et labore quam, laudantium,
+                 aliquam a. Cum animi, corrupti accusamus tempora pariatur accusantium quidem consequatur!
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'img/vision.png' %}" class="img-fluid mt-5" alt="">
+        </div>
+    </div>
+
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <img src="{% static 'img/mision.png' %}" class="img-fluid mt-5" alt="">
+        </div>
+        <div class="col-md-6">
+            <h3 class="about-title">OUR MISSION</h3>
+            <p class="text-justify">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptate nesciunt, 
+                voluptatem quasi eum incidunt quos impedit explicabo optio magni error! 
+                Delectus aliquid reprehenderit repudiandae, eos exercitationem modi 
+                doloremque qui recusandae molestiae quas dolorum deserunt aliquam, 
+                distinctio porro laborum quibusdam blanditiis dicta magnam dolor facere in nisi.
+                 Temporibus recusandae id beatae nihil perferendis molestiae, debitis ipsam corporis laborum,
+                  accusamus atque consectetur officiis quam voluptas voluptatibus natus velit nam eveniet sit 
+                  deserunt non qui voluptate quis. Quos atque corrupti rerum repudiandae deserunt tempora velit
+                   soluta suscipit, fugit et labore quam, laudantium,
+                 aliquam a. Cum animi, corrupti accusamus tempora pariatur accusantium quidem consequatur!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Meet Our Team -->
+    <section id="team" class="shadow-sm">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                  <h1>Meet Our Team</h1>
+                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="member">
+                      <div class="member-img">
+                          <img src="{% static 'img/bg1.jpg' %}" class="img-fluid" alt="">
+                      </div>
+                        <div class="member-info">
+                            <h4>Md.Mobasshir Aalam</h4>
+                            <span>Web Developer</span>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="member">
+                      <div class="member-img">
+                          <img src="{% static 'img/bg1.jpg' %}" class="img-fluid" alt="">
+                      </div>
+                        <div class="member-info">
+                            <h4>Amrit Joshi</h4>
+                            <span>Web Designer</span>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="member">
+                      <div class="member-img">
+                          <img src="{% static 'img/bg1.jpg' %}" class="img-fluid" alt="">
+                      </div>
+                        <div class="member-info">
+                            <h4>Manoj Adhikari</h4>
+                            <span>Web Designer</span>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="member">
+                      <div class="member-img">
+                          <img src="{% static 'img/bg1.jpg' %}" class="img-fluid" alt="">
+                      </div>
+                        <div class="member-info">
+                            <h4>Aneesh Pandey</h4>
+                            <span>Web Designer</span>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

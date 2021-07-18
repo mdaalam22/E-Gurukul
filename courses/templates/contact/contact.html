@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us | E-Gurukul {% endblock title %}
+{% block css %}
+     .header-section{
+				position: sticky;
+                top:0;
+                width: 100%;
+                background-image: linear-gradient(135deg, rgba(107, 107, 107,0.06) 0%, rgba(107, 107, 107,0.06) 50%,rgba(202, 202, 202,0.06) 50%, rgba(202, 202, 202,0.06) 100%),linear-gradient(90deg, rgb(20,20,20),rgb(20,20,20)); background-size: 30px 30px;
+				padding:20px 0 20px 0;
+                z-index:9999;
+                
+			}
+    .footer-section{
+        border-top:none;
+    }
+{% endblock css %}
+{% block contact %}text-danger{% endblock contact %}
+{% block content %}
+<div class="container-fluid bg-dark">
+   <div class="text-center p-5">
+        <h2 class="text-danger display-3 font-weight-bold">Contact Us</h2>
+        <p class="text-white font-weight-bold">Lorem ipsum dolor sit amet, consectetur adipisicing elit sit molestias</p>
+   </div>
+</div>
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-8">
+            {% include 'partials/_message.html' %}
+            <form action="{% url 'contact' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group p-3">
+                            {{form.name}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group p-3">
+                            {{form.email}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group p-3">
+                            {{form.subject}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group p-3">
+                            {{form.phone_number}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group p-3">
+                    {{form.message}}
+                </div>
+                <div class="text-center my-2">
+                    <button type="submit" class="btn btn-danger px-4 my-3">
+                    Send Message <i class="fa fa-share-square py-2"></i></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4 shadow p-4 my-4" style="height:50vh;">
+            <div>
+                <div class="row mt-2 no-gutters">
+                    <div class="col-md-2">
+                        <span ><i class="fa fa-phone fa-2x mt-2"></i></span>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="mb-0 font-weight-bold">Phone</p>
+                        <span>44833874</span>
+                    </div>
+                </div>
+                <div class="row mt-2 no-gutters">
+                    <div class="col-md-2">
+                        <span><i class="fa fa-envelope fa-2x mt-2"></i></i></span>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="mb-0 font-weight-bold">Email</p>
+                        <span>info@egurukul.com</span>
+                    </div>
+                </div>
+                <div class="row mt-2 no-gutters">
+                    <div class="col-md-2">
+                        <span ><i class="fa fa-globe fa-2x mt-2"></i></i></span>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="mb-0 font-weight-bold">Web</p>
+                        <span>www.egurukul.com</span>
+                    </div>
+                </div>
+                <div class="row mt-2 no-gutters">
+                    <div class="col-md-2">
+                        <span ><i class="fa fa-fax fa-2x mt-2"></i></span>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="mb-0 font-weight-bold">Fax</p>
+                        <span>+44833874</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

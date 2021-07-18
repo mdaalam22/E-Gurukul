@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}
+    Sign up
+{% endblock %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+{% endblock css %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        
+            <form class="text-center col-md-5" method="POST" enctype="multipart/form-data">
+                <div class="col-md-12 m-5">
+                <div class="card shadow">
+                    <div class="card-title">
+                        <h1>Sign Up</h1>
+                    </div>
+                    <div class="card-body">
+                        {% if form.errors %}
+                           
+                            <div class="alert alert-sm alert-dismissible alert-danger">
+                            {% for field in form %}
+                                <strong>{{ field.errors|striptags }}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                </button>
+                            {% endfor %}
+                            </div>
+                            
+                        {% endif %}
+                        
+                        {% csrf_token %}
+                            <div class="form-column mb-4">
+                                <div class="mb-2">
+                                    {{ form.username }}
+                                </div>
+                                <br><br><br>
+                                <div class="mb-2">
+                                    {{ form.first_name }}
+                                </div>
+                                <br><br><br>
+                                <div>
+                                    {{ form.last_name }}
+                                </div>
+                                <br><br>
+                            </div>
+                            {{ form.email }}
+                           
+                            
+                           
+                           
+                            {{ form.password1 }}
+                            {{ form.password2 }}
+                            <button class="btn-block btn btn-danger my-4" type="submit">Sign up</button>
+                        </div>
+                </div>
+                 </div>
+            </form>
+       
+    </div>
+{% endblock %}
+
+
+            

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}My courses{% endblock %}
+{% block css %}
+ .header-section{
+				position: sticky;
+                top:0;
+                width: 100%;
+                background-image: linear-gradient(135deg, rgba(107, 107, 107,0.06) 0%, rgba(107, 107, 107,0.06) 50%,rgba(202, 202, 202,0.06) 50%, rgba(202, 202, 202,0.06) 100%),linear-gradient(90deg, rgb(20,20,20),rgb(20,20,20)); background-size: 30px 30px;
+				padding:20px 0 20px 0;
+                z-index:9999;
+			}
+{% endblock css %}
+{% block manage_course_list %}text-danger{% endblock manage_course_list %}
+{% block content %}
+    <div class="row m-5">
+       
+        <div class="col-md-12">
+            <div class="card text-center shadow-sm">
+                <h1>My courses</h1>
+                        {% if messages %}
+                            <div class="messages my-3">
+                                {% for message in messages %}
+                                <div class="alert alert-sm alert-dismissible alert-success">
+                            
+                                        <strong>Success! {{ message }}</strong>
+                                
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                <div class="row no-gutters text-center py-4 px-2">
+                    {% for course in object_list %}
+                    <div class="col-md-4 text-center mt-1 shadow-sm">
+                        <img src="{{course.thumbnail.url}}" class="img-fluid p-3" alt="">
+                        <h4 class="p-2">{{ course.title }}</h4>
+                            <p>
+                            <a href="{% url "course_edit" course.id %}" class="btn btn-info">Edit</a>
+                            <a href="{% url "course_delete" course.id %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url "course_module_update" course.id %}" class="btn btn-warning">Edit modules</a>
+                            </p>
+                            {% if course.modules.count > 0 %}
+                                <p><a href="{% url "module_content_list" course.modules.first.id %}" class="btn btn-secondary">
+                                Manage contents</a></p>
+                            {% endif %}
+                        
+                    </div>
+                    {% empty %}
+                     <div class="text-center m-auto py-3">
+                        <h3>You haven't created any courses yet.</h3>
+                     </div>   
+                    
+                    {% endfor %}
+                    
+                </div>
+                <p>
+                    <a href="{% url "course_create" %}" class="btn btn-danger px-4 py-2 my-5 font-weight-bold">Create new
+                    course</a>
+                    </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
