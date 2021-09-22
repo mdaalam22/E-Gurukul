@@ -4,6 +4,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 from django.template.loader import render_to_string
+# from PIL import Image,ImageFont,ImageDraw
+from django.conf import settings
+import PIL.Image,PIL.ImageFont,PIL.ImageDraw
+from datetime import date
+
 
 # Create your models here.
 class Subject(models.Model):
@@ -96,3 +101,61 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
         
+
+
+
+class CourseContentStatus(models.Model):
+    student_username = models.ForeignKey(User,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    module = models.ForeignKey(Module,on_delete=models.CASCADE)
+    content = models.ForeignKey(Content,on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'course_content_status'
+        verbose_name_plural = 'course_content_status'
+
+
+class CourseStatus(models.Model):
+    username = models.ForeignKey(User,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    percentage = models.IntegerField(default=0)
+    completed = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'course_status'
+        verbose_name_plural = 'course_status'
+
+
+class Certificate(models.Model):
+    username = models.ForeignKey(User,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    certificate = models.ImageField(default='certificates.jpg',upload_to='certificates')
+    date = models.DateTimeField(auto_now_add=True)
+    view = models.BooleanField(default=False)
+
+    # def save(self):
+    #     super().save()
+
+    #     name = self.username.get_full_name()
+    #     course_title = self.course.title
+    #     today = date.today()
+    #     today_date = today.strftime("%B %d, %Y")
+    #     instructor = self.course.owner.get_full_name()
+    #     text1 = f"successfully completed {course_title}"
+    #     text2 = f"online course on {today_date}."
+    #     font1 = PIL.ImageFont.truetype('arial.ttf',100)
+    #     font2 = PIL.ImageFont.truetype('arial.ttf',60)
+    #     image = PIL.Image.open(self.certificate.path)
+    #     draw = PIL.ImageDraw.Draw(image)
+    #     draw.text(xy=(217,453),text=name,fill=(0,0,0),font=font1)
+    #     draw.text(xy=(217,641),text=text1,fill=(0,0,0),font=font2)
+    #     draw.text(xy=(217,710),text=text2,fill=(0,0,0),font=font2)
+    #     draw.text(xy=(193,1193),text=instructor,fill=(0,0,0),font=font2)
+    #     save_to_path = settings.MEDIA_ROOT+"certificates"
+    #     filename = f'{self.username.username}_{course_title}'
+    #     image.save(save_to_path+filename+'.jpeg')
+    #     self.certificate = filename+'.jpeg'
+
+

@@ -29,14 +29,15 @@
                 <div class="col-md-9 p-4">
                     <div class="text-center">
                         <div class="row">
-                        {% for course in object_list %}
+                        {% for cs in course_status %}
                             <div class="col-md-4 my-2">
                                 <div class="card shadow-sm" style="background:#ffcccc;">
                                     <div class="card-body" style="height:170px;">
-                                        <h6 class="py-2 font-weight-bold">{{course.title}}</h6>
-                                        <span>Created By: <b><span class="text-danger">{{course.owner.username}}</span></b></span>
+                                        <h6 class="py-2 font-weight-bold">{{cs.course.title}}</h6>
+                                        <span>Created By: <b><span class="text-danger">{{cs.course.owner.username}}</span></b></span>
+                                        
                                         <div class="progress mt-2">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                            <div class="progress-bar {% if cs.completed %}bg-success{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{cs.percentage}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{cs.percentage}}%</div>
                                         </div>
                                     </div>
                                 </div>

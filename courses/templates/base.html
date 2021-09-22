@@ -77,6 +77,7 @@
 						{% if request.user.is_authenticated %}
 							<a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img src="{{request.user.profile.image.url}}" class="rounded-circle" width="30px" height="30px" alt="">  {{request.user.username}}
+								<span class="text-success font-weight-bold" style="font-size:16px;">&#8226;</span>
 							</a>
 
 							<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuLink" style="width:30%;">
@@ -110,7 +111,7 @@
 							<li><a href="{% url 'manage_course_list' %}" class="{% block manage_course_list %}{% endblock manage_course_list %}" >Manage Courses</a></li>
 							{% endif %}
 							
-							<li><a href="blog.html">Blog</a></li>
+							
 							<li><a href="{% url 'contact' %}" class="{% block contact %}{% endblock contact %}">Contact</a></li>
 							
 						</ul>
@@ -191,12 +192,11 @@
 	<script src="{% static 'js/main.js' %}"></script>
 	{% comment %} <script src="{% static 'js/reconnecting-websocket.js' %}"></script> {% endcomment %}
     <script>
-    $(document).ready(function() {
+   document.addEventListener('DOMContentLoaded', function() {
+	   /*	var navbar = document.getElementById("navbar");
+		var pageoff = document.getElementById('pageoff');
+		var sticky = pageoff.offsetTop;
 		window.onscroll = function() {StickyFun()};
-
-			var navbar = document.getElementById("navbar");
-			var pageoff = document.getElementById('pageoff');
-			var sticky = pageoff.offsetTop;
 
 			function StickyFun() {
 			if (window.pageYOffset >= sticky) {
@@ -206,7 +206,7 @@
 				navbar.classList.remove("sticky");
 				
 			}
-			}
+			}  */
 		
     {% block domready %}
 

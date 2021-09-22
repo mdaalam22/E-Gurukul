@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.http.response import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import render,redirect
 from django.views.generic.edit import CreateView
@@ -7,7 +9,7 @@ from .forms import SignUpForm,CourseEnrollForm,ProfileUpdateForm,StudentUpdateFo
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from courses.models import Course,Subject
+from courses.models import Certificate, Course,Subject,Module,Content,CourseContentStatus,CourseStatus
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required
@@ -25,7 +27,100 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from .utils import token_generator
 import threading
+import json
+
+from django.conf import settings
+
+
 # Create your views here.
+
+def calc_course_status(user,course):
+    total_content = CourseContentStatus.objects.filter(student_username=user,
+                        course=course)
+    total_content_count = total_content.count()
+    total_content_completed = total_content.filter(completed=True).count()
+
+    percentage = int((total_content_completed/total_content_count)*100)
+    return percentage
+
+
+import PIL.Image,PIL.ImageFont,PIL.ImageDraw
+from datetime import date
+import io
+from django.core.files.base import ContentFile 
+
+def generate_certificate(user,course):
+    img_io = io.BytesIO()
+    name = user.get_full_name()
+    course_title = course.title
+    today = date.today()
+    today_date = today.strftime("%B %d, %Y")
+    instructor = course.owner.get_full_name()
+    text1 = f"successfully completed {course_title}"
+    text2 = f"online course on {today_date}."
+    font1 = PIL.ImageFont.truetype('arial.ttf',100)
+    font2 = PIL.ImageFont.truetype('arial.ttf',60)
+    image = PIL.Image.open(settings.MEDIA_ROOT + "\\certificates.jpg")
+    draw = PIL.ImageDraw.Draw(image)
+    draw.text(xy=(217,453),text=name,fill=(0,0,0),font=font1)
+    draw.text(xy=(217,641),text=text1,fill=(0,0,0),font=font2)
+    draw.text(xy=(217,710),text=text2,fill=(0,0,0),font=font2)
+    draw.text(xy=(193,1193),text=instructor,fill=(0,0,0),font=font2)
+    image.save(img_io, format='JPEG', quality=100)
+    file_name = f'{user.username}_{course_title}'
+    img_content = ContentFile(img_io.getvalue(), file_name+'.jpg')
+    return img_content
+
+@login_required(login_url = 'login')
+def request_for_certificate(request,course_id):
+    course = Course.objects.get(id=course_id)
+    user = request.user
+    completed = CourseStatus.objects.filter(username=request.user,course=course).first()
+    if completed.completed:
+        if Certificate.objects.filter(username=request.user,course=course,view=True).exists():
+            return redirect('certificate')
+        cert = generate_certificate(user,course)
+        certificate = Certificate(username=request.user,course=course,certificate=cert,view=True)
+        certificate.save()
+
+        return render(request,"students/student/show-certificate.html",{'certificate':certificate.certificate})
+    else:
+        contents = CourseContentStatus.objects.filter(student_username=request.user,course=course)
+        return render(request,"students/student/show-incomplete-content.html",{'contents':contents})
+
+@login_required(login_url = 'login')
+def course_status(request):
+    if request.method == 'POST':
+        content_id = json.loads(request.body).get('content_id')
+        content = Content.objects.get(id=int(content_id))
+        course = content.module.course
+        CourseContentStatus.objects.filter(student_username=request.user,
+                        content=content).update(completed=True)
+        get_percentage = calc_course_status(request.user,course)
+        if get_percentage != 100:
+            CourseStatus.objects.filter(username=request.user,course=course).update(percentage=get_percentage)
+        else:
+            CourseStatus.objects.filter(username=request.user,course=course).update(percentage=get_percentage,completed=True)
+            # return redirect('request_for_certificate',course_id=course.id)
+
+        data = {'percentage':get_percentage}
+        return JsonResponse(data,safe=True)
+
+        #expenses = Expense.objects.filter(amount__istartswith=search_str,owner=request.user)|Expense.objects.filter(date__istartswith=search_str,owner=request.user)|Expense.objects.filter(category__icontains=search_str,owner=request.user)|Expense.objects.filter(description__icontains=search_str,owner=request.user)
+
+        #data = expenses.values()
+        #return JsonResponse(list(data),safe=False)
+        
+
+def create_course_content_status(user,course):
+    modules = Module.objects.filter(course=course)
+    contents = Content.objects.filter(module__in=modules)
+    for content in contents:
+        new_data = CourseContentStatus.objects.create(student_username=user,course=course,module=content.module,
+                    content=content)
+        new_data.save()
+    new_data_2 = CourseStatus(username=user,course=course)
+    new_data_2.save()
 
 
 class EmailThread(threading.Thread):
@@ -85,6 +180,7 @@ class VerificationView(View):
 
         return redirect('student_course_list')
 
+
 class StudentEnrollCourseView(LoginRequiredMixin, FormView):
     course = None
     form_class = CourseEnrollForm
@@ -92,6 +188,10 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         self.course = form.cleaned_data['course']
         self.course.students.add(self.request.user)
+
+        status_thread = threading.Thread(target=create_course_content_status,args=(self.request.user,self.course))
+        status_thread.start()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -121,10 +221,24 @@ class StudentCourseDetailView(DetailView):
             # get current module
             module = course.modules.get(id=self.kwargs['module_id'])
             context['content'] = module.contents.get(id=self.kwargs['content_id'])
+            context['course_status'] = CourseStatus.objects.filter(username=self.request.user,
+                                        course=course).first()
+            context['content_status'] = CourseContentStatus.objects.filter(
+                student_username = self.request.user,course=course
+            )
+            context['content_completed'] = CourseContentStatus.objects.filter(
+                student_username = self.request.user,course=course,
+                content = context['content']
+            ).first()
             
         else:
             # get first module
             context['module'] = course.modules.all()[0]
+            context['course_status'] = CourseStatus.objects.filter(username=self.request.user,
+                                        course=course).first()
+            context['content_status'] = CourseContentStatus.objects.filter(
+                student_username = self.request.user,course=course
+            )
             
         return context
 
@@ -229,7 +343,8 @@ class ChangePasswordView(LoginRequiredMixin,View):
 
 class CertificateView(LoginRequiredMixin,View):
     def get(self,request):
-        return render(request,'students/student/certificate.html')
+        certificates = Certificate.objects.filter(username=request.user)
+        return render(request,'students/student/certificate.html',{'certificates':certificates})
 
 
 class EnrolledCoursesView(LoginRequiredMixin, ListView):
@@ -238,3 +353,10 @@ class EnrolledCoursesView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(students__in=[self.request.user])  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+       
+        context['course_status'] = CourseStatus.objects.filter(username=self.request.user)
+
+        return context
+           

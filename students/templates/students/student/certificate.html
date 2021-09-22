@@ -49,30 +49,16 @@
                 <div class="col-md-9 p-4">
                     <div class="text-center">
                         <div class="row">
+                            {% for cert in certificates %}
                             <div class="col-md-6">
                                 <div class="my-2 download-cert">
-                                    <a href="{% static 'img/cert.jpg' %}" download>Download</a>
-                                    <img src="{% static 'img/cert.jpg' %}" class="img-thumbnail" alt="">
+                                    <a href="{{cert.certificate.url}}" download>Download</a>
+                                    <img src="{{cert.certificate.url}}" class="img-thumbnail" alt="">
                                 </div>
                             </div>
-                             <div class="col-md-6">
-                                 <div class="my-2 download-cert">
-                                    <a href="{% static 'img/cert.jpg' %}" download>Download</a>
-                                    <img src="{% static 'img/cert.jpg' %}" class="img-thumbnail" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                 <div class="my-2 download-cert">
-                                    <a href="{% static 'img/cert.jpg' %}" download>Download</a>
-                                    <img src="{% static 'img/cert.jpg' %}" class="img-thumbnail" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                 <div class="my-2 download-cert">
-                                    <a href="{% static 'img/cert.jpg' %}" download>Download</a>
-                                    <img src="{% static 'img/cert.jpg' %}" class="img-thumbnail" alt="">
-                                </div>
-                            </div>
+                            {% empty %}
+                                <h2>You have no any certificates</h2>
+                             {% endfor %}
                         </div>
                     </div>
                 </div>

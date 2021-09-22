@@ -176,8 +176,10 @@ class CourseDetailView(DetailView):
     template_name = 'courses/course/detail.html'
 
     def get_context_data(self, **kwargs):
+        student_enrlled_list = Course.objects.filter(slug=self.kwargs['slug'])
         context = super().get_context_data(**kwargs)
         context['enroll_form'] = CourseEnrollForm(initial={'course':self.object})
+        context['student_enrolled'] = student_enrlled_list.filter(students=self.request.user).exists()
         return context        
 
 

@@ -24,4 +24,3 @@ class Profile(models.Model):
     
 
 
-

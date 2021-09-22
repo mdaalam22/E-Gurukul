@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}
+    Certificate | E-Gurukul
+{% endblock %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+    .activatecert{
+    background:#bd2130 !important;
+}
+.activatecert a{
+    color:#fff !important;
+}
+.download-cert a{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#ffcccc;
+    color:#000;
+    font-weight:bold;
+    padding:5px 9px;
+    visibility:hidden;
+    transition:0.5s;
+}
+.download-cert:hover>img{
+    border:5px dashed #ffcccc;
+    z-index:10;
+}
+.download-cert:hover>a{
+    visibility:visible;
+}
+
+{% endblock css %}
+{% block content %}
+    <div class="d-flex align-item-center justify-content-center">
+        
+         <div class="col-md-6 my-5">
+            <div class="my-2 download-cert">
+                <a href="{{certificate.url}}" download>Download</a>
+                <img src="{{certificate.url}}" class="img-thumbnail" alt="">
+            </div>
+        </div>
+
+       
+    </div>
+{% endblock %}
+
+
+            

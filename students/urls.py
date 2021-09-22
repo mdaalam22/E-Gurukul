@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.decorators.csrf import csrf_exempt
 # from django.views.decorators.cache import cache_page
 # from django.contrib.auth import views as auth_view
 
@@ -16,5 +17,9 @@ urlpatterns = [
     path('enrolled-courses/',views.EnrolledCoursesView.as_view(),name='enrolled_courses'),
     path('certificate/',views.CertificateView.as_view(),name='certificate'),
     path('activate/<uidb64>/<token>/',views.VerificationView.as_view(),name='activate'),
+    path('course-status/',csrf_exempt(views.course_status),name="course_status"),
+    path('request-for-certificate/<course_id>/',views.request_for_certificate,name="request_for_certificate"),
+
+
     
 ]

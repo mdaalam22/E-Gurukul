@@ -45,7 +45,40 @@
                                 <p><a href="{% url "module_content_list" course.modules.first.id %}" class="btn btn-secondary">
                                 Manage contents</a></p>
                             {% endif %}
-                        
+                            <p class="text-danger font-weight-bold">
+                                No. of student enrolled: {{course.students.count}}
+                                {% if course.students.count > 0 %}
+                                   
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#Modal{{course.id}}">
+                                        view
+                                    </button>
+
+                                    
+                                    <div class="modal fade" id="Modal{{course.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{course.id}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title font-weight-bold" id="exampleModalLabel{{course.id}}">{{course.title}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-left">
+                                            <p class="lead">List of Students enrolled to this course:</p>
+                                            {% for st in course.students.all %}
+                                                <span>{{ forloop.counter }}. {{st.first_name}} {{st.last_name}}</span> <br>
+                                                
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                {% endif %}
+                            </p>
                     </div>
                     {% empty %}
                      <div class="text-center m-auto py-3">

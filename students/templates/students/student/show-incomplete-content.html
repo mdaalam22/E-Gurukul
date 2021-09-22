@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}
+    Certificate | E-Gurukul
+{% endblock %}
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: gray;
+			}
+    
+
+{% endblock css %}
+{% block content %}
+    <div class="container text-justify my-5">
+        
+        <div class="col-md-8 m-auto">
+            <h2 class="mb-3">Please first complete all the left(&#10060;) content</h2>
+            {% for content in contents %}
+            
+                {% if content.completed %}
+
+                    <p class="lead font-weight text-success pb-0">&#10003; {{content.content.item.title}}</p>
+                {% else %}
+                    <p class="lead font-weight text-danger pb-0">&#10060; {{content.content.item.title}}</p>
+                {% endif %}
+           
+            {% endfor %}
+        </div>
+
+       
+    </div>
+{% endblock %}
+
+
+            

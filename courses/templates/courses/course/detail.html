@@ -22,7 +22,7 @@
 						<div class="course-metas">
 							<div class="course-meta">
 								<div class="course-author">
-									<div class="ca-pic set-bg" data-setbg="{% static 'img/authors/2.jpg'%}"></div>
+									<div class="ca-pic set-bg" data-setbg="{{object.owner.profile.image.url}}"></div>
 									<h6>Teacher</h6>
 									<p>{{object.owner.username}}</p>
 								</div>
@@ -43,11 +43,16 @@
 						</div>
 						{% if request.user.is_authenticated %}
 							{% if request.user.profile.is_email_confirmed %}
-								<form action="{% url "student_enroll_course" %}" method="post">
-								{{ enroll_form }}
-								{% csrf_token %}
-								<input type="submit" value="Enroll now" class="site-btn buy-btn">
-								</form>
+								{% if student_enrolled%}
+									<p class="lead"><b>You're already enrolled to this course.</b></p>
+									<a href="{% url "student_course_detail" object.id %}" class="btn btn-primary">Access Content</a>
+								{% else %}
+									<form action="{% url "student_enroll_course" %}" method="post">
+									{{ enroll_form }}
+									{% csrf_token %}
+									<input type="submit" value="Enroll now" class="site-btn buy-btn">
+									</form>
+								{% endif %}
 							{% else %}
 								<div class="alert alert-info">
 									Info! Your Account is not activated. Please activate your 

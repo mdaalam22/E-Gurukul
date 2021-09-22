@@ -79,11 +79,15 @@
 						<div class="ci-text">
 							<h5>{{lc.title}}</h5>
 							<p>{{lc.overview|slice:"0:100"}}..</p>
+							
 							<span>Added by <emp>{{lc.owner.username}}<emp></span>
+							<p>Registered Student: {{lc.students.count}}</p>
 							<hr>
 							<a href="{% url "course_detail" lc.slug %}" class="btn btn-danger btn-block">View</a>
+							
 						</div>
                         </a>
+						
 					</div>
 				</div>
 				{% endfor %}
