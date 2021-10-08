@@ -128,10 +128,19 @@ class CourseStatus(models.Model):
         verbose_name_plural = 'course_status'
 
 
+# ========generate code for certificate======
+import secrets
+def random_code():
+    sys_random = secrets.SystemRandom()
+    secure_code = sys_random.randrange(100000, 999999)
+    return secure_code
+
+
 class Certificate(models.Model):
     username = models.ForeignKey(User,on_delete=models.CASCADE)
     course = models.ForeignKey(Course,on_delete=models.CASCADE)
     certificate = models.ImageField(default='certificates.jpg',upload_to='certificates')
+    code = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     view = models.BooleanField(default=False)
 

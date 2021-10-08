@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Verify Certificates for code
+{% if query %} "{{query }}" {% endif %}
+{% endblock title %}
+
+{% block css %}
+     .header-section{
+				position: relative;
+				padding:20px 0 20px 0;
+				background-color: #333;
+			}
+    .footer-section {
+        border-top: 0px !important;
+    }
+{% endblock css %}
+
+{% block content %}
+    <div class="container-fluid bg-dark">
+        <div class="m-auto p-5 text-center">
+            <form action="{% url 'verify_certificate' %}" method="get" class="d-flex justify-content-center align-item-center">
+                <div class="form-group">
+                    <input type="number" name="code" autofocus class="form-control py-4 w-100" maxlength="30" required>
+                    <button type="submit" class="btn btn-danger px-5 py-2 my-2">Verify</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h3 class="bg-secondary px-4 py-3 text-white">Verify certificate for code
+    {% if query %}
+        <span class="font-weight-bold">"{{query}}"</span>
+    {% endif %}
+    </h3>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-3">Online Certificate Verification</h2>
+       {% if query %}
+            {% if certificate %}
+                <p class="lead text-center text-success">Found!</p>
+                <div>
+                    <img src="{{certificate.certificate.url}}" width="100%" height="600px" alt="">
+                </div>
+            {% else %}
+                <div class="text-center py-3" style="border:1px solid red;">
+                    <p class="display-4">&#128542;</p>
+                    <span class="text-danger">Sorry!</span>
+                    <p>Your verification code could not be found in our record.</p>
+                </div>
+            {% endif %}
+        
+            
+        {% endif %}
+        
+    
+
+    </div>
+{% endblock content %}

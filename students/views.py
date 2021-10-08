@@ -49,26 +49,38 @@ from datetime import date
 import io
 from django.core.files.base import ContentFile 
 
-def generate_certificate(user,course):
+# ========generate code for certificate======
+import secrets
+def random_code():
+    sys_random = secrets.SystemRandom()
+    secure_code = sys_random.randrange(100000, 999999)
+    return secure_code
+
+def generate_certificate(user,course,cert_code):
     img_io = io.BytesIO()
+    # ===========
     name = user.get_full_name()
     course_title = course.title
     today = date.today()
-    today_date = today.strftime("%B %d, %Y")
-    instructor = course.owner.get_full_name()
-    text1 = f"successfully completed {course_title}"
-    text2 = f"online course on {today_date}."
-    font1 = PIL.ImageFont.truetype('arial.ttf',100)
-    font2 = PIL.ImageFont.truetype('arial.ttf',60)
-    image = PIL.Image.open(settings.MEDIA_ROOT + "\\certificates.jpg")
+    completed_date = today.strftime('%d/%m/%Y')
+    font1 = PIL.ImageFont.truetype('arial.ttf',20)
+    font2 = PIL.ImageFont.truetype('arial.ttf',16)
+    font3 = PIL.ImageFont.truetype('arial.ttf',12)
+    author = course.owner.get_full_name()
+    code = str(cert_code)
+
+    image = PIL.Image.open(settings.MEDIA_ROOT + "\\certificate.png")
     draw = PIL.ImageDraw.Draw(image)
-    draw.text(xy=(217,453),text=name,fill=(0,0,0),font=font1)
-    draw.text(xy=(217,641),text=text1,fill=(0,0,0),font=font2)
-    draw.text(xy=(217,710),text=text2,fill=(0,0,0),font=font2)
-    draw.text(xy=(193,1193),text=instructor,fill=(0,0,0),font=font2)
-    image.save(img_io, format='JPEG', quality=100)
+    draw.text(xy=(290,226),text=name,fill=(0,0,0),font=font1)
+    draw.text(xy=(249,322),text=course_title,fill=(0,0,0),font=font2)
+    draw.text(xy=(147,426),text=completed_date,fill=(0,0,0),font=font2)
+    draw.text(xy=(520,425),text=author,fill=(0,0,0),font=font2)
+    draw.text(xy=(572,473),text=code,fill=(0,0,0),font=font3)
+    # =============================
+    
+    image.save(img_io, format='PNG', quality=100)
     file_name = f'{user.username}_{course_title}'
-    img_content = ContentFile(img_io.getvalue(), file_name+'.jpg')
+    img_content = ContentFile(img_io.getvalue(), file_name+'.png')
     return img_content
 
 @login_required(login_url = 'login')
@@ -79,8 +91,9 @@ def request_for_certificate(request,course_id):
     if completed.completed:
         if Certificate.objects.filter(username=request.user,course=course,view=True).exists():
             return redirect('certificate')
-        cert = generate_certificate(user,course)
-        certificate = Certificate(username=request.user,course=course,certificate=cert,view=True)
+        code = random_code()
+        cert = generate_certificate(user,course,code)
+        certificate = Certificate(username=request.user,course=course,certificate=cert,code=code,view=True)
         certificate.save()
 
         return render(request,"students/student/show-certificate.html",{'certificate':certificate.certificate})
@@ -220,16 +233,17 @@ class StudentCourseDetailView(DetailView):
         if 'module_id' in self.kwargs:
             # get current module
             module = course.modules.get(id=self.kwargs['module_id'])
-            context['content'] = module.contents.get(id=self.kwargs['content_id'])
-            context['course_status'] = CourseStatus.objects.filter(username=self.request.user,
-                                        course=course).first()
-            context['content_status'] = CourseContentStatus.objects.filter(
-                student_username = self.request.user,course=course
-            )
-            context['content_completed'] = CourseContentStatus.objects.filter(
-                student_username = self.request.user,course=course,
-                content = context['content']
-            ).first()
+            if self.request.user.is_authenticated:
+                context['content'] = module.contents.get(id=self.kwargs['content_id'])
+                context['course_status'] = CourseStatus.objects.filter(username=self.request.user,
+                                            course=course).first()
+                context['content_status'] = CourseContentStatus.objects.filter(
+                    student_username = self.request.user,course=course 
+                )
+                context['content_completed'] = CourseContentStatus.objects.filter(
+                    student_username = self.request.user,course=course,
+                    content = context['content']
+                ).first()
             
         else:
             # get first module
@@ -359,4 +373,32 @@ class EnrolledCoursesView(LoginRequiredMixin, ListView):
         context['course_status'] = CourseStatus.objects.filter(username=self.request.user)
 
         return context
-           
+
+
+
+# adding genrate report of student custum view in django admin 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404
+
+
+@staff_member_required
+def admin_generate_report(request, username):
+    user = get_object_or_404(User, username=username)
+    course_status = CourseStatus.objects.filter(username=user)
+    certificates = Certificate.objects.filter(username=user)
+
+    context = {
+        'user':user,
+        'course_status':course_status,
+        'certificates':certificates
+    }
+    return render(request,'admin/generate-report.html',context)
+
+
+def verify_certificate(request):
+    query = request.GET.get('code',None)
+    certificate = None
+    if query:
+        certificate = Certificate.objects.filter(code=int(query)).first()
+    context = {'query':query,'certificate':certificate}
+    return render(request,'students/certificate/verify-certificate.html',context)

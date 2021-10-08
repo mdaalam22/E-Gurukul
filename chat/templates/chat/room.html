@@ -35,10 +35,9 @@
                     <h2 class="chat-title">Chat Group</h2>
                 </div>
                 <div class="card-body">
-                    <div class="group-div"><a href="">Django group</a></div>
-                    <div class="group-div"><a href="">web group</a></div>
-                    <div class="group-div"><a href="">Node js group</a></div>
-                    <div class="group-div"><a href="">Digital marketing group</a></div>
+                    {% for course in courses_list %}
+                        <div class="group-div"><a href="{% url 'chat:course_chat_room' course.id %}">{{course.title}}</a></div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

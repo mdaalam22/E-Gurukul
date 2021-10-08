@@ -32,9 +32,9 @@ class CourseStatusAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertifacateAdmin(admin.ModelAdmin):
-    list_display = ['username', 'course', 'certificate','view']
-    list_filter = ['username','course']
-    search_fields = ['username', 'course']
+    list_display = ['username', 'course', 'certificate','code','view','date']
+    list_filter = ['username','course','code']
+    search_fields = ['username', 'course','code']
 
 
 @admin.register(Contact)

@@ -179,7 +179,8 @@ class CourseDetailView(DetailView):
         student_enrlled_list = Course.objects.filter(slug=self.kwargs['slug'])
         context = super().get_context_data(**kwargs)
         context['enroll_form'] = CourseEnrollForm(initial={'course':self.object})
-        context['student_enrolled'] = student_enrlled_list.filter(students=self.request.user).exists()
+        if self.request.user.is_authenticated:
+            context['student_enrolled'] = student_enrlled_list.filter(students=self.request.user).exists()
         return context        
 
 

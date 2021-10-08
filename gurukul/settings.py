@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'admin_interface',
+    'jazzmin',
     'courses.apps.CoursesConfig',
     'colorfield',
     'django.contrib.admin',
@@ -87,6 +87,18 @@ TEMPLATES = [
         },
     },
 ]
+
+JAZZMIN_SETTINGS = {
+    
+    "site_title": "E-Gurukul Admin",
+    "site_header": "Admin",
+    "site_brand": "E-Gurukul",
+    "site_logo": "/img/logo.png",
+    "site_logo_classes": "img-fluid",
+    "site_icon": None,
+    "welcome_sign": "Welcome to the E-Gurukul Admin",
+    "copyright": "E-Gurukul",
+}
 
 WSGI_APPLICATION = 'gurukul.wsgi.application'
 
